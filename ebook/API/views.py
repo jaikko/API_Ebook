@@ -1,21 +1,37 @@
-from django.http import request
-from django.shortcuts import render
+import django_filters
+from django_filters.filters import CharFilter
+from django_filters.rest_framework.backends import DjangoFilterBackend
+from rest_framework import filters
 from rest_framework import viewsets, permissions, generics
-from rest_framework.views import APIView
-
 from .permissions import IsConnected
 from .models import *
 from .serializers import *
-from django_filters.rest_framework import DjangoFilterBackend
-import requests
+from django.db.models import Q
 
 # Create your views here.
+
+
+class BookFilter(django_filters.FilterSet):
+    title= CharFilter(lookup_expr='icontains')
+    category= CharFilter(field_name='category__name', lookup_expr='exact')
+
+    class Meta:
+        model = Book
+        fields = ['title','category']
+
 
 class BookView(viewsets.ModelViewSet):
    
     permission_classes = [IsConnected]
     serializer_class = BookSerializer
     queryset = Book.objects.all()
+    filter_class = BookFilter
+
+class CategoryView(viewsets.ModelViewSet):
+   
+    permission_classes = [IsConnected]
+    serializer_class = CategorySerializer
+    queryset = Category.objects.all()
     
 
 class UserView(viewsets.ModelViewSet):
