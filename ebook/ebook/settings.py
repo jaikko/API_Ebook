@@ -28,7 +28,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -64,8 +63,9 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_FILTER_BACKENDS': (
         ['django_filters.rest_framework.DjangoFilterBackend']
-    )
-
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 100
 }
 TEMPLATES = [
     {
@@ -93,13 +93,13 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
-        'NAME': 'Ebook',
+        'NAME': 'zfcsbghm',
 
-        'USER': 'postgres',
+        'USER': 'zfcsbghm',
 
-        'PASSWORD': 'password',
+        'PASSWORD': 'W8V15KK4wYcGYdNimdduqWbRf4DDltXJ',
 
-        'HOST': 'localhost',
+        'HOST': 'abul.db.elephantsql.com',
 
         'PORT': '5432',
     }
@@ -124,7 +124,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/

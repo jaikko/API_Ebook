@@ -1,12 +1,11 @@
 from django.db import models
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
-from django.db.models import deletion
 from django.utils.translation import ugettext_lazy as _
 from django.utils.timezone import now
-from django.core.validators import MaxValueValidator, MinLengthValidator
 
 # Create your models here.
+
 
 class CustomUserManager(BaseUserManager):
     """
@@ -39,6 +38,7 @@ class CustomUserManager(BaseUserManager):
             raise ValueError(_('Superuser must have is_superuser=True.'))
         return self.create_user(email, password, **extra_fields)
 
+
 class User(AbstractUser):
 
     username = None
@@ -49,7 +49,7 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
 
     def update(self, *args, **kwargs):
-        kwargs.update({'date_updated': now, 'is_active' : self.is_active})
+        kwargs.update({'date_updated': now, 'is_active': self.is_active})
         super().update(*args, **kwargs)
 
         return self
@@ -59,16 +59,27 @@ class User(AbstractUser):
     def __str__(self):
         return self.email
 
+
 class Category(models.Model):
-    name = models.CharField(max_length=64, null=False)
+    name = models.CharField(max_length=64, null=False, unique=True)
+
+    class Meta:
+        verbose_name_plural = "categories"
+
     def __str__(self):
         return f"{self.name}"
+
 
 class Book(models.Model):
     title = models.CharField(max_length=64, null=False)
     author = models.CharField(max_length=64, null=False)
-    image = models.CharField( max_length=100, null=False)
+    summary = models.TextField(null=False)
+    publisher = models.CharField(max_length=64, null=True)
+    page = models.IntegerField(null=True)
+    langage = models.CharField(max_length=64, default="Français", null=False)
+    date = models.IntegerField(null=True)
+    image = models.CharField(max_length=100, null=False)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
     def __str__(self):
         return f"{self.title}"
-

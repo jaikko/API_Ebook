@@ -1,21 +1,22 @@
-from django.urls import path, include, re_path
-
-from API.views import *
+from django.urls import path, include
+from API.views import (
+    CategoryView,
+    UserView,
+    BookView,
+    RegisterView
+)
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
     TokenVerifyView,
 )
-
 from rest_framework_nested import routers
+
 
 router = routers.DefaultRouter()
 router.register(r'book', BookView, basename="Book")
-# contract_routeur = routers.NestedSimpleRouter(router, r'clients', lookup='client')
 cat_router = routers.DefaultRouter()
 cat_router.register(r'category', CategoryView, basename="Category")
-
-
 
 urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
@@ -25,5 +26,4 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('user/', UserView.as_view({'get': 'list'}), name='user'),
-    
 ]
